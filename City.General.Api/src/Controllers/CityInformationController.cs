@@ -9,6 +9,7 @@ using System;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace City.General.Api.Controllers
 {
@@ -28,7 +29,10 @@ namespace City.General.Api.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<CityInformation>> Get([FromRoute]string name)
         {
-            var weather = await this.httpClient.GetStringAsync("https://localhost:5001/WeatherForecast/2");
+            //Todo - real scenario => get city Id from database by name
+            string weatherApiUrl =  this.configuration.GetSection("WeatherApiUrl").Value + "/1";
+
+            var weather = await this.httpClient.GetStringAsync(weatherApiUrl);
             var actualWeather = JsonConvert.DeserializeObject<WeatherForecast>(weather);
 
             var rand = new Random();
