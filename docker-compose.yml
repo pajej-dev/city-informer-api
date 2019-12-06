@@ -1,0 +1,26 @@
+version: '3'
+services: 
+  city-general-api:
+    image: pablokielek/city-general-api:develop
+    ports: 
+      - 8003:80
+    networks: 
+      - city-network
+    container_name: city-general-api
+    environment: 
+      - WeatherApiUrl=http://city-weather-api/WeatherForecast
+      - ASPNETCORE_ENVIRONMENT=Development,
+
+  
+  city-weather-api:
+    image: pablokielek/city-weather-api:develop
+    ports: 
+      - 8001:80
+    networks:
+      - city-network
+    container_name: city-weather-api
+    environment: 
+    - ASPNETCORE_ENVIRONMENT=Development,
+
+networks: 
+  city-network:
