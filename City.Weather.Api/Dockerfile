@@ -13,6 +13,8 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
 
+ENV ASPNETCORE_URLS http://+:8001
 EXPOSE 8001
+
 ENTRYPOINT [ "dotnet", "City.Weather.Api.dll" ]
 

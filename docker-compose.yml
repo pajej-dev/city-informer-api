@@ -3,7 +3,7 @@ services:
   city-general-api:
     image: pablokielek/city-general-api:develop
     ports: 
-      - 8003:80
+      - 8003:8003
     networks: 
       - city-network
     container_name: city-general-api
@@ -15,7 +15,7 @@ services:
   city-weather-api:
     image: pablokielek/city-weather-api:develop
     ports: 
-      - 8001:80
+      - 8001:8001
     networks:
       - city-network
     container_name: city-weather-api

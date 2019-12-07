@@ -15,6 +15,8 @@ ENV WeatherApiUrl http://localhost:[nr]
 WORKDIR /app
 COPY --from=build /app/out .
 
+ENV ASPNETCORE_URLS http://+:8003
 EXPOSE 8003
+
 ENTRYPOINT [ "dotnet", "City.General.Api.dll" ]
 
