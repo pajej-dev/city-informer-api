@@ -17,6 +17,9 @@ nupkg/
 *.userosscache
 *.sln.docstates
 
+#cert
+*.pfx
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
