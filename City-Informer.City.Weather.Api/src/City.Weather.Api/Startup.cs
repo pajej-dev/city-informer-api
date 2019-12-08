@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using City.Common.Extensions;
+using City.Common.Providers;
 
 namespace City.Weather.Api
 {
@@ -26,6 +28,8 @@ namespace City.Weather.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpContextAccessor();
+            services.AddTransient<ICorrelationProvider, CorrelationProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +39,7 @@ namespace City.Weather.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCorrelationId();
 
             app.UseHttpsRedirection();
 
@@ -46,6 +51,7 @@ namespace City.Weather.Api
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

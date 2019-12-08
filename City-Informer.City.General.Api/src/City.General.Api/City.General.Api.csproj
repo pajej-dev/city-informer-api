@@ -11,4 +11,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../../../City-Informer.City.Common/src/City.Common/City.Common.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-namespace City.General.Api.Dictionaries
+namespace City.Common.Dictionaries
 {
     public struct Headers
     {

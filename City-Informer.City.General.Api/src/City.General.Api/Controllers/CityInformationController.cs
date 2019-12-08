@@ -11,6 +11,8 @@ using System.Text.Json;
 using Newtonsoft.Json;
 using System.IO;
 using Microsoft.Extensions.Logging;
+using City.Common.Providers;
+using City.Common.Dictionaries;
 
 namespace City.General.Api.Controllers
 {
@@ -20,12 +22,18 @@ namespace City.General.Api.Controllers
     {
         private HttpClient httpClient;
         private readonly IConfiguration configuration;
+        private readonly ICorrelationProvider correlationProvider;
         private readonly ILogger logger;
 
-        public CityInformationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILoggerFactory loggerFactory)
+        public CityInformationController(
+            IHttpClientFactory httpClientFactory, 
+            IConfiguration configuration, 
+            ILoggerFactory loggerFactory,
+            ICorrelationProvider correlationProvider )
         {
             this.logger = loggerFactory.CreateLogger(nameof(CityInformationController));
             this.configuration = configuration;
+            this.correlationProvider = correlationProvider;
             this.httpClient = httpClientFactory.CreateClient();
         }
 
@@ -33,12 +41,15 @@ namespace City.General.Api.Controllers
         public async Task<ActionResult<CityInformation>> Get([FromRoute]string name)
         {
             //Todo - real scenario => get city Id from database by name
-            string weatherApiUrl =  this.configuration.GetSection("WeatherApiUrl").Value + "/1";
+            string weatherApiUrl =  this.configuration.GetSection("WeatherApiUrl").Value + "/" + name;
 
+            this.httpClient.DefaultRequestHeaders.Add(Headers.CorrelationId, correlationProvider.CorrelationId);
             var weather = await this.httpClient.GetStringAsync(weatherApiUrl);
+            
             var actualWeather = JsonConvert.DeserializeObject<WeatherForecast>(weather);
 
-            this.logger.LogInformation($"{ System.DateTime.UtcNow} - Sucessfully fetched data from : { weatherApiUrl } ");
+            this.logger.LogInformation($"{ System.DateTime.UtcNow} - Fetched data from : { weatherApiUrl }. "
+                 +	$"| CorrelationId: { correlationProvider.CorrelationId }");
 
             var rand = new Random();
 
@@ -50,7 +61,9 @@ namespace City.General.Api.Controllers
                 ActualWeather = actualWeather
             };
 
-            this.logger.LogInformation($"{ System.DateTime.UtcNow} - Sucessfully returned information about: { name }. ");
+            this.logger.LogInformation($"{ System.DateTime.UtcNow} - Returned information about: { name }. "
+                +	$"| CorrelationId: { correlationProvider.CorrelationId }");
+
 
             return Ok(cityInfo);
         }

@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using City.General.Api.Extensions;
+using City.Common.Extensions;
+using City.Common.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,8 @@ namespace City.General.Api
         {
             services.AddControllers();
             services.AddHttpClient();
+            services.AddHttpContextAccessor();
+            services.AddTransient<ICorrelationProvider, CorrelationProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +40,7 @@ namespace City.General.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCorrelationId();
 
             app.UseHttpsRedirection();
 
@@ -48,8 +52,6 @@ namespace City.General.Api
             {
                 endpoints.MapControllers();
             });
-
-            app.UseCorrelationId();
         }
     }
 }

@@ -1,8 +1,8 @@
 using System;
-using City.General.Api.Middlewares;
+using City.Common.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
-namespace City.General.Api.Extensions
+namespace City.Common.Extensions
 {
     public static class CorrelationIdExtension
     {

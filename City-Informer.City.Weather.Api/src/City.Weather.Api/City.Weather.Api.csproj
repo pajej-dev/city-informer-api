@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../../City-Informer.City.Common/src/City.Common/City.Common.csproj" />
   </ItemGroup>
+
 
 </Project>

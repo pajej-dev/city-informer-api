@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using City.General.Api.Dictionaries;
+using City.Common.Dictionaries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
-namespace City.General.Api.Middlewares
+namespace City.Common.Middlewares
 {
     public class CorrelationIdMiddleware
     {
@@ -22,7 +22,6 @@ namespace City.General.Api.Middlewares
 
         public Task Invoke(HttpContext httpContext)
         {
-
             if(!httpContext.Request.Headers.TryGetValue(Headers.CorrelationId, out StringValues headerValues))
             {
                 headerValues = Guid.NewGuid().ToString();
