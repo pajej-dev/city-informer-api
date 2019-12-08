@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using Newtonsoft.Json;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace City.General.Api.Controllers
 {
@@ -19,9 +20,11 @@ namespace City.General.Api.Controllers
     {
         private HttpClient httpClient;
         private readonly IConfiguration configuration;
+        private readonly ILogger logger;
 
-        public CityInformationController(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public CityInformationController(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
+            this.logger = loggerFactory.CreateLogger(nameof(CityInformationController));
             this.configuration = configuration;
             this.httpClient = httpClientFactory.CreateClient();
         }
@@ -35,6 +38,8 @@ namespace City.General.Api.Controllers
             var weather = await this.httpClient.GetStringAsync(weatherApiUrl);
             var actualWeather = JsonConvert.DeserializeObject<WeatherForecast>(weather);
 
+            this.logger.LogInformation($"{ System.DateTime.UtcNow} - Sucessfully fetched data from : { weatherApiUrl } ");
+
             var rand = new Random();
 
             var cityInfo = new CityInformation
@@ -44,6 +49,8 @@ namespace City.General.Api.Controllers
                 DateOfBuild = new System.DateTime(rand.Next(1600,2000), 12, 1),
                 ActualWeather = actualWeather
             };
+
+            this.logger.LogInformation($"{ System.DateTime.UtcNow} - Sucessfully returned information about: { name }. ");
 
             return Ok(cityInfo);
         }

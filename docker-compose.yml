@@ -9,7 +9,7 @@ services:
     container_name: city-general-api
     environment: 
       - WeatherApiUrl=http://city-weather-api/WeatherForecast
-      - ASPNETCORE_ENVIRONMENT=Development,
+      - ASPNETCORE_ENVIRONMENT=Development
 
   
   city-weather-api:
@@ -20,7 +20,11 @@ services:
       - city-network
     container_name: city-weather-api
     environment: 
-    - ASPNETCORE_ENVIRONMENT=Development,
+    - ASPNETCORE_ENVIRONMENT=Development
+  
+  nginx:
+
+  
 
 networks: 
   city-network:
