@@ -9,7 +9,8 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "Kestrel__Certificates__Default__Path": "https-web.pfx",
-        "Kestrel__Certificates__Default__Password": "https-web"
+        "Kestrel__Certificates__Default__Password": "https-web",
+        "DOCKER": "true"
       }
     }
   }
