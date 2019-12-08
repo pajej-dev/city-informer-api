@@ -2,17 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <env>$(ASPNETCORE_ENVIRONMENT)</env>
   </PropertyGroup>
 
-  <ItemGroup>
-  </ItemGroup>
-
-  <ItemGroup>
+  <ItemGroup >
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(env)' == 'local'">
     <ProjectReference Include="../../../City-Informer.City.Common/src/City.Common/City.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(env)' == 'development'">
+    <ProjectReference Include="../City.Common/City.Common.csproj" />
   </ItemGroup>
 
 </Project>

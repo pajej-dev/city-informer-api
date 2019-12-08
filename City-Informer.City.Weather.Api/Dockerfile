@@ -1,12 +1,20 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic AS build 
 
+ARG ASPNETCORE_ENVIRONMENT=development
+
 WORKDIR /app
 
-COPY src/City.Weather.Api.csproj WeatherApi/
-RUN dotnet restore WeatherApi/City.Weather.Api.csproj
+COPY City-Informer.City.Weather.Api/src/City.Weather.Api/City.Weather.Api.csproj City.Weather.Api/
+COPY City-Informer.City.Common/src/City.Common/City.Common.csproj City.Common/
 
-COPY src/. WeatherApi/  
-RUN dotnet publish WeatherApi/City.Weather.Api.csproj -c Release -o /app/out
+RUN dotnet restore City.Weather.Api/City.Weather.Api.csproj
+RUN dotnet restore City.Common/City.Common.csproj
+
+COPY City-Informer.City.Weather.Api/src/City.Weather.Api/.  City.Weather.Api/
+COPY City-Informer.City.Common/src/City.Common/.  City.Common/
+
+RUN dotnet publish City.Weather.Api/City.Weather.Api.csproj -c Release -o /app/out
+
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic AS runtime
 

@@ -1,16 +1,22 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic AS build 
 
+ARG ASPNETCORE_ENVIRONMENT=development
+
 WORKDIR /app
 
-COPY src/City.General.Api.csproj GeneralApi/
-RUN dotnet restore GeneralApi/City.General.Api.csproj
+COPY City-Informer.City.General.Api/src/City.General.Api/City.General.Api.csproj City.General.Api/
+COPY City-Informer.City.Common/src/City.Common/City.Common.csproj City.Common/
 
-COPY src/. GeneralApi/  
-RUN dotnet publish GeneralApi/City.General.Api.csproj -c Release -o /app/out
+RUN dotnet restore City.General.Api/City.General.Api.csproj
+RUN dotnet restore City.Common/City.Common.csproj
+
+COPY City-Informer.City.General.Api/src/City.General.Api/.  City.General.Api/
+COPY City-Informer.City.Common/src/City.Common/.  City.Common/
+
+RUN dotnet publish City.General.Api/City.General.Api.csproj -c Release -o /app/out
+
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic AS runtime
-
-ENV WeatherApiUrl http://localhost:[nr]
 
 WORKDIR /app
 COPY --from=build /app/out .
