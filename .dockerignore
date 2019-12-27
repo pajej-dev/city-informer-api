@@ -1,0 +1,9 @@
+bin/*
+obj/*
+out/*
+.vscode/*
+README.md
+Utils/scripts/*
+Utils/nginx/*
+***.pfx
+***.png

@@ -19,6 +19,7 @@ nupkg/
 
 #cert
 *.pfx
+*.pem
 
 # Build results
 [Dd]ebug/

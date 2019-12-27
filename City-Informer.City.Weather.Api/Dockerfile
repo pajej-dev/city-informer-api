@@ -8,7 +8,6 @@ COPY City-Informer.City.Weather.Api/src/City.Weather.Api/City.Weather.Api.csproj
 COPY City-Informer.City.Common/src/City.Common/City.Common.csproj City.Common/
 
 RUN dotnet restore City.Weather.Api/City.Weather.Api.csproj
-RUN dotnet restore City.Common/City.Common.csproj
 
 COPY City-Informer.City.Weather.Api/src/City.Weather.Api/.  City.Weather.Api/
 COPY City-Informer.City.Common/src/City.Common/.  City.Common/

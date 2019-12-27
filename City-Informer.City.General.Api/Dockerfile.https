@@ -1,0 +1,46 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic AS build 
+
+ARG ASPNETCORE_ENVIRONMENT=development
+
+WORKDIR /app
+
+COPY City-Informer.City.General.Api/src/City.General.Api/City.General.Api.csproj City.General.Api/
+COPY City-Informer.City.Common/src/City.Common/City.Common.csproj City.Common/
+
+RUN dotnet restore City.General.Api/City.General.Api.csproj
+
+COPY City-Informer.City.General.Api/src/City.General.Api/.  City.General.Api/
+COPY City-Informer.City.Common/src/City.Common/.  City.Common/
+
+RUN dotnet publish City.General.Api/City.General.Api.csproj -c Release -o /app/out
+
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-bionic AS runtime
+
+WORKDIR /var/ssl
+
+COPY Utils/ssl/rootCA*.pem /root/.local/share/mkcert/
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y wget libnss3-tools  \
+    && wget -O mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.3.0/mkcert-v1.3.0-linux-amd64 \
+    && chmod +x mkcert \
+    && mv mkcert /usr/local/bin \
+    && mkcert -install \
+    && echo 'CA installed correctly if appear above' \
+    && mkcert -pkcs12 -p12-file /var/ssl/development-cert.p12 city-general-api city-general-api00.com localhost \
+    && apt-get purge -y wget libnss3-tools \
+    && apt-get autoremove -y \
+    && apt-get clean -y
+
+ARG Kestrel__Certificates__Default__Path=/var/ssl/development-cert.p12
+ARG Kestrel__Certificates__Default__Password=changeit
+
+WORKDIR /app
+COPY --from=build /app/out .
+
+ENV ASPNETCORE_URLS http://+:8003;https://+:8004
+EXPOSE 8003 8004
+
+ENTRYPOINT [ "dotnet", "City.General.Api.dll" ]
+

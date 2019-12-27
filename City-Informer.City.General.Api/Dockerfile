@@ -8,7 +8,6 @@ COPY City-Informer.City.General.Api/src/City.General.Api/City.General.Api.csproj
 COPY City-Informer.City.Common/src/City.Common/City.Common.csproj City.Common/
 
 RUN dotnet restore City.General.Api/City.General.Api.csproj
-RUN dotnet restore City.Common/City.Common.csproj
 
 COPY City-Informer.City.General.Api/src/City.General.Api/.  City.General.Api/
 COPY City-Informer.City.Common/src/City.Common/.  City.Common/
@@ -22,7 +21,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 ENV ASPNETCORE_URLS http://+:8003
-EXPOSE 8003
+EXPOSE 8003 
 
 ENTRYPOINT [ "dotnet", "City.General.Api.dll" ]
 
