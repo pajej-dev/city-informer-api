@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic AS build 
 
-ARG ASPNETCORE_ENVIRONMENT=development
+ENV ASPNETCORE_ENVIRONMENT=development
 
 WORKDIR /app
 
@@ -33,8 +33,8 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && apt-get clean -y
 
-ARG Kestrel__Certificates__Default__Path=/var/ssl/development-cert.p12
-ARG Kestrel__Certificates__Default__Password=changeit
+ENV Kestrel__Certificates__Default__Path=/var/ssl/development-cert.p12
+ENV Kestrel__Certificates__Default__Password=changeit
 
 WORKDIR /app
 COPY --from=build /app/out .

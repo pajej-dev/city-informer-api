@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-bionic AS build 
 
-ARG ASPNETCORE_ENVIRONMENT=development
+ENV ASPNETCORE_ENVIRONMENT=development
 
 WORKDIR /app
 
